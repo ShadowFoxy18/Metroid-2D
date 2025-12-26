@@ -16,20 +16,17 @@ public class EnemyBehavior : MonoBehaviour
 
     private void Update()
     {
-        if (moveToEnd)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, endPosition, speed * Time.deltaTime);
+        Vector3 DestinationPosition = !moveToEnd ? startPosition : endPosition;
+        MoveEnemy(DestinationPosition);
+    }
 
-            // Arrive to end position
-            if (transform.position == endPosition) 
-                moveToEnd = false;
-        } else
-        {
-            transform.position = Vector3.MoveTowards(transform.position, startPosition, speed * Time.deltaTime);
+    void MoveEnemy(Vector3 positonToMove)
+    {
+        transform.position = Vector3.MoveTowards(transform.position, positonToMove, speed * Time.deltaTime);
 
-            // Arrive to start position
-            if (transform.position == startPosition)
-                moveToEnd = true;
+        if (transform.position == positonToMove)
+        {
+            moveToEnd = !moveToEnd;
         }
     }
 }
