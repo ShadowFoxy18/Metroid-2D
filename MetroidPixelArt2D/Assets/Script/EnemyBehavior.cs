@@ -4,6 +4,7 @@ public class EnemyBehavior : MonoBehaviour
 {
     [SerializeField]
     int speed = 2;
+    public int enemyDamege = 1;
 
     public Vector3 startPosition, endPosition;
     bool moveToEnd;
