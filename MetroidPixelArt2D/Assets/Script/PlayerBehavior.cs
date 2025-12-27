@@ -74,10 +74,11 @@ public class PlayerBehavior : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (collision.CompareTag("Enemy") && vulnerable)
         {
             LostLife(collision.GetComponent<EnemyBehavior>().enemyDamege);
             vulnerable = false;
+            rb.AddForce(new Vector3(rb.linearVelocityX * -1, 0 ,0), ForceMode2D.Impulse);
         }
     }
 
@@ -97,7 +98,7 @@ public class PlayerBehavior : MonoBehaviour
 
     void EndGame()
     {
-        Debug.Log("EndGame");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 }
