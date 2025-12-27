@@ -1,5 +1,6 @@
 using UnityEditor.Tilemaps;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -12,9 +13,17 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     int lifes = 5;
 
+    [SerializeField]
+    float invulnerableTime = 3f;
+    float _invulnerableTime;
+    [SerializeField]
+    Color invulnerableColor = Color.yellow;
+    bool vulnerable = true;
+
     Rigidbody2D rb;
     SpriteRenderer sr;
 
+    
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
@@ -34,12 +43,26 @@ public class PlayerBehavior : MonoBehaviour
             rb.AddForce(JumpCapacity * Vector2.up, ForceMode2D.Impulse);
         }
 
-        // Read if the player turn left or right, if tourn left (linearvelocity < 0), the sprite flip in x
-        sr.flipX = rb.linearVelocityX < 0;
+        if(!vulnerable)
+        {
+
+            _invulnerableTime -= Time.deltaTime;
+            vulnerable = _invulnerableTime < 0;
+
+            sr.color = invulnerableColor;
+
+        } else if (vulnerable)
+        {
+            _invulnerableTime = invulnerableTime;
+            sr.color = Color.white;
+        }
+
+            // Read if the player turn left or right, if tourn left (linearvelocity < 0), the sprite flip in x
+            sr.flipX = rb.linearVelocityX < 0;
     }
 
 
-    // ---------------------------------------------------------------- Collisions ----------------------------------------------------------- //
+    // --------------------------------------------------- Collisions ------------------------------------------------------- //
     bool ColissionFloor()
     {
         RaycastHit2D hit;
@@ -54,11 +77,12 @@ public class PlayerBehavior : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             LostLife(collision.GetComponent<EnemyBehavior>().enemyDamege);
+            vulnerable = false;
         }
     }
 
 
-    // ---------------------------------------------------- Player Behavior ---------------------------------- //
+    // ---------------------------------------------------- Player Behavior ------------------------------------------------- //
     void LostLife(int damage)
     {
         lifes -= damage;
