@@ -10,8 +10,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField]
     int JumpCapacity = 5;
 
-    [SerializeField]
-    int lifes = 5;
+    public int lifes = 5;
 
     [SerializeField]
     float invulnerableTime = 3f;

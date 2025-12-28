@@ -1,14 +1,20 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HUBControler : MonoBehaviour
 {
     [SerializeField]
-    TextMeshProUGUI textPoint, textTime, textLife;
+    TextMeshProUGUI textPoint, textTime;
 
-    public void UpdatePointsText(string totalPoints)
+    [SerializeField]
+    Transform lifesZone;
+    [SerializeField]
+    GameObject life;
+
+    public void UpdatePointsText(int totalPoints)
     {
-        textPoint.text = totalPoints;
+        textPoint.text = totalPoints.ToString("0000");
     }
 
     public void UpdateTimeText(float totalTime)
@@ -18,12 +24,20 @@ public class HUBControler : MonoBehaviour
 
     public void UpdateLifeText(int lifes)
     {
-        string textLifes = "[] ";
-        string textTotalLifes = "";
-        for (int i = 0; i < lifes; i++)
-        {
-            textTotalLifes += textTotalLifes;
-        }
-        textPoint.text = textLifes;
+        
+        
+        
+    }
+
+
+    void CheckLifes(int lifes)
+    {
+        
+    }
+
+    
+    public void CreateLife()
+    {
+        //Instantiate(life, lifesZone.position,  Quaternion.identity, lifesZone);
     }
 }

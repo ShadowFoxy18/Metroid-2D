@@ -10,6 +10,7 @@ public class GameControler : MonoBehaviour
     bool gameEnd;
 
     PlayerBehavior player;
+    HUBControler controlerHUB;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -17,12 +18,24 @@ public class GameControler : MonoBehaviour
     {
         _timeGame = timeGame;
         player = FindAnyObjectByType<PlayerBehavior>();
+        controlerHUB = FindAnyObjectByType<HUBControler>();
+
+        for (int i = 0; i < player.lifes; i++)
+        {
+            controlerHUB.CreateLife();
+        }
     }
+
 
     // Update is called once per frame
     void Update()
     {
         _timeGame -= Time.deltaTime;
+
+        controlerHUB.UpdateLifeText(player.lifes);
+        controlerHUB.UpdatePointsText(points);
+        controlerHUB.UpdateTimeText(_timeGame);
+
 
         gameEnd = _timeGame < 0;
 
@@ -31,4 +44,7 @@ public class GameControler : MonoBehaviour
             player.EndGame();
         }
     }
+
+
+
 }
