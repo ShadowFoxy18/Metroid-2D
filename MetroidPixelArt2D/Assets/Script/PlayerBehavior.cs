@@ -22,18 +22,23 @@ public class PlayerBehavior : MonoBehaviour
 
     Rigidbody2D rb;
     SpriteRenderer sr;
+    Animator ani;
 
     
 
     private void Start() {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        ani = GetComponent<Animator>();
     }
 
     private void FixedUpdate() {
         float movePlayer = Input.GetAxis("Horizontal");
 
         rb.linearVelocity = new Vector2(movePlayer * speed, rb.linearVelocity.y);
+
+        // Read if the player turn left or right, if tourn left (linearvelocity < 0), the sprite flip in x
+        sr.flipX = rb.linearVelocityX < 0;
     }
 
     private void Update()
@@ -43,22 +48,9 @@ public class PlayerBehavior : MonoBehaviour
             rb.AddForce(JumpCapacity * Vector2.up, ForceMode2D.Impulse);
         }
 
-        if(!vulnerable)
-        {
+        InvulnerableMethod();
 
-            _invulnerableTime -= Time.deltaTime;
-            vulnerable = _invulnerableTime < 0;
-
-            sr.color = invulnerableColor;
-
-        } else if (vulnerable)
-        {
-            _invulnerableTime = invulnerableTime;
-            sr.color = Color.white;
-        }
-
-            // Read if the player turn left or right, if tourn left (linearvelocity < 0), the sprite flip in x
-            sr.flipX = rb.linearVelocityX < 0;
+        AnimatePlayer();
     }
 
 
@@ -93,12 +85,40 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
-
-
-
-    void EndGame()
+    public void EndGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+
+    void InvulnerableMethod()
+    {
+        if (!vulnerable)
+        {
+
+            _invulnerableTime -= Time.deltaTime;
+            vulnerable = _invulnerableTime < 0;
+
+            sr.color = invulnerableColor;
+
+        }
+        else if (vulnerable)
+        {
+            _invulnerableTime = invulnerableTime;
+            sr.color = Color.white;
+        }
+    }
+
+    void AnimatePlayer()
+    {
+        // Jump Action
+        if (!ColissionFloor()) ani.Play("playerJump");
+
+        // Run Action
+        else if (rb.linearVelocityX > 1 || rb.linearVelocityX < -1) ani.Play("playerRun");
+
+        // Iddle Action
+        else ani.Play("playerIddle");
+        // if ((rb.linearVelocityX > 1 || rb.linearVelocityX < -1) && rb.linearVelocityY == 0) 
+    }
 }

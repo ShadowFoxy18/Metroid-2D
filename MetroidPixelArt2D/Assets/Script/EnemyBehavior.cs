@@ -6,13 +6,22 @@ public class EnemyBehavior : MonoBehaviour
     int speed = 2;
     public int enemyDamege = 1;
 
-    public Vector3 startPosition, endPosition;
+    [SerializeField]
+    Transform spriteStart, spriteEnd;
+    Vector3 startPosition, endPosition;
     bool moveToEnd;
+
+    private void Awake()
+    {
+        startPosition = spriteStart.position;
+        endPosition = spriteEnd.position;
+
+        moveToEnd = true;
+    }
 
     private void Start()
     {
-        startPosition = transform.position;
-        moveToEnd = true;
+        transform.position = startPosition;
     }
 
     private void Update()
